@@ -24,6 +24,23 @@
             ]
         },
         {
+            "name": "metrics",
+            "image": "wen777/consumer-metrics",
+            "cpu": 2,
+            "memory": 300,
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 4000
+                }
+            ],
+            "links": ["influxsrv"],
+            "essential": true,
+            "environment": [
+                {"name": "NODE_ENV", "value": "production"}
+            ]
+        },
+        {
             "name": "grafana",
             "image": "grafana/grafana",
             "cpu": 2,
@@ -39,24 +56,19 @@
             "environment": [
                 {"name": "INFLUXDB_HOST", "value": "localhost"},
                 {"name": "INFLUXDB_PORT", "value": "8086"},
-                {"name": "INFLUXDB_NAME", "value": "cadvisor"},
+                {"name": "INFLUXDB_NAME", "value": "telegraf"},
+                {"name": "GF_INSTALL_PLUGINS", "value": "grafana-clock-panel,grafana-piechart-panel"},
                 {"name": "INFLUXDB_USER", "value": "root"},
                 {"name": "INFLUXDB_PASS", "value": "hyperpilot"}
             ]
         },
         {
-            "name": "cadvisor",
-            "image": "google/cadvisor",
-            "cpu": 4,
+            "name": "telegraf",
+            "image": "wen777/telegraf",
+            "cpu": 2,
             "memory": 300,
             "links": ["influxsrv"],
-            "command": ["-storage_driver=influxdb", "-storage_driver_db=cadvisor", " -storage_driver_host=influxsrv:8086" "-storage_driver_user=root", "-storage_driver_password=hyperpilot"],
-            "portMappings": [
-                {
-                    "containerPort": 8080,
-                    "hostPort": 8080
-                }
-            ],
+            "command": ["--config=/etc/telegraf.conf"],
             "essential": true,
             "mountPoints": [
                 {
