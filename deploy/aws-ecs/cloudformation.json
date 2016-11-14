@@ -355,7 +355,7 @@
         "ContainerDefinitions": [
           {
             "Essential": true,
-            "Image": "weaveworksdemos/front-end",
+            "Image": "wen777/front-end",
             "Name": "front-end",
             "Memory": 1024,
             "PortMappings": [
